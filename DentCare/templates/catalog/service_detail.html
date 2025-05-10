@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Start -->
+<div class="container-fluid bg-primary py-5 hero-header mb-5">
+    <div class="row py-3">
+        <div class="col-12 text-center">
+            <h1 class="display-3 text-white animated zoomIn">{{ service.title }}</h1>
+            <a href="{% url 'index' %}" class="h4 text-white">Главная</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a href="{% url 'service' %}" class="h4 text-white">Услуги</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <span class="h4 text-white">{{ service.title }}</span>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+<!-- Service Detail Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Service Image -->
+            <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="position-relative h-100 rounded overflow-hidden">
+                    <img class="position-absolute w-100 h-100" src="{{ service.photo.url }}" alt="{{ service.title }}" style="object-fit: cover;">
+                </div>
+            </div>
+            
+            <!-- Service Info -->
+            <div class="col-lg-7 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="bg-light rounded p-5">
+                    <h1 class="mb-4">{{ service.title }}</h1>
+                    
+                    <!-- Price -->
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="btn-square bg-primary rounded-circle me-3">
+                            <i class="fa fa-ruble-sign text-white"></i>
+                        </div>
+                        <h4 class="mb-0">{{ service.price }} ₽</h4>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">Описание услуги</h5>
+                        <p class="mb-0">{{ service.description|linebreaks }}</p>
+                    </div>
+                    
+                    <!-- Doctors -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">Врачи, оказывающие услугу</h5>
+                        <div class="row g-3">
+                            {% for doctor in service.doctor.all %}
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    {% if doctor.photo %}
+                                    <img class="rounded-circle" src="{{ doctor.photo.url }}" alt="{{ doctor.get_full_name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                                    {% else %}
+                                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fa fa-user-md text-white"></i>
+                                    </div>
+                                    {% endif %}
+                                    <div class="ms-3">
+                                        <h6 class="mb-0">{{ doctor.get_full_name }}</h6>
+                                        <small class="text-muted">{{ doctor.position }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'appointment' %}" class="btn btn-primary py-3 px-5">
+                            <i class="fa fa-calendar-check me-2"></i>Записаться
+                        </a>
+                        <a href="{% url 'service' %}" class="btn btn-outline-primary py-3 px-5">
+                            <i class="fa fa-arrow-left me-2"></i>Назад к услугам
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Service Detail End -->
+{% endblock %}

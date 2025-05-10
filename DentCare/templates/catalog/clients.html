@@ -1,0 +1,70 @@
+
+{% extends 'catalog/base_manager.html' %}
+
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2><i class="fa fa-users me-2"></i>Управление пользователями</h2>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ФИО</th>
+                        <th>Почта</th>
+                        <th>Роль</th>
+                        <th>История</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                    <tr>
+                        <td class="align-content-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fa fa-user-circle text-primary me-2 fa-2x"></i>
+                                <div>
+                                    <div class="fw-bold">{{ client.get_full_name }}</div>
+                                    <small class="text-muted">@{{ client.username }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-content-center">{{ client.email }}</td>
+                        <td class="text-white align-content-center" style="min-width: 200px;">
+                            {% if client.is_manager %}
+                            <span class="status-badge status-active p-2 rounded" style="background-color: #2bff27;">
+                                <i class="fa fa-user-cog me-1"> Менеджер</i>
+                            </span>
+                            {% elif client.is_admin %}
+                            <span class="status-badge status-active p-2 rounded" style="background-color: #0d6efd;">
+                                <i class="fa fa-user-shield me-1"> Администратор</i>
+                            </span>
+                            {% else %}
+                            <span class="status-badge status-active p-2 rounded" style="background-color: #6c757d;">
+                                <i class="fa fa-user me-1"> Пользователь</i>
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="align-content-center">
+                            <a href="{% url 'appointment-history-client' client.pk %}" class="btn btn-sm btn-info btn-action" title="История записей">
+                                <i class="fa fa-history"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-4">
+                            <i class="fa fa-info-circle me-2"></i>Пользователи не найдены
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

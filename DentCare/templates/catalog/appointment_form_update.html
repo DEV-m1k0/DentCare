@@ -1,0 +1,472 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Start -->
+<div class="container-fluid bg-primary py-5 hero-header mb-5">
+    <div class="row py-3">
+        <div class="col-12 text-center">
+            <h1 class="display-3 text-white animated zoomIn">Обновление записи</h1>
+            <a href="{% url 'index' %}" class="h4 text-white">Главная</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a href="{% url 'my-appointment' %}" class="h4 text-white">Мои записи</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a href="#" class="h4 text-white">Обновление</a>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+<!-- Appointment Update Form Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="bg-light rounded p-5 shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="mb-0 text-primary">
+                            <i class="fa fa-calendar-check me-2"></i>Информация о записи
+                        </h2>
+                        <a href="{% url 'appointment-history-client' appointment.user.pk %}" class="btn btn-outline-primary">
+                            <i class="fa fa-arrow-left me-2"></i>Назад
+                        </a>
+                    </div>
+
+                    <!-- Current Appointment Info -->
+                    <div class="card border-0 shadow-sm mb-4 hover-card">
+                        <div class="card-body p-4">
+                            {% if appointment %}
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="flex-shrink-0">
+                                        <div class="bg-primary rounded-circle p-3">
+                                            <i class="fa fa-calendar-alt text-white fa-2x"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h4 class="card-title mb-1">{{ appointment.service }}</h4>
+                                        <p class="text-muted mb-0">
+                                            <i class="fa fa-clock text-primary me-2"></i>
+                                            {{ appointment.date|date:"d.m.Y H:i" }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <i class="fa fa-user text-primary fa-lg"></i>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <p class="mb-0">{{ appointment.user.get_full_name }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <i class="fa fa-user-md text-primary fa-lg"></i>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                {% if appointment.doctor %}
+                                                    <p class="mb-0">{{ appointment.doctor.name }} {{ appointment.doctor.last_name }}</p>
+                                                {% else %}
+                                                    <p class="mb-0 text-muted">Врач не назначен</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="text-center text-muted py-4">
+                                    <i class="fa fa-exclamation-circle fa-3x mb-3"></i>
+                                    <p>Информация о записи не найдена</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Update Form -->
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <h4 class="mb-3 text-primary">
+                                <i class="fa fa-edit me-2"></i>Обновить информацию
+                            </h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_date" class="form-label fw-bold">
+                                            <i class="fa fa-calendar text-primary me-2"></i>Дата приёма
+                                        </label>
+                                        <div class="input-group custom-input-group">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-calendar-alt text-primary"></i>
+                                            </span>
+                                            {{ form.date }}
+                                        </div>
+                                        {% if form.date.errors %}
+                                        <div class="text-danger mt-2">
+                                            <i class="fa fa-exclamation-circle me-1"></i>{{ form.date.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="id_service" class="form-label fw-bold">
+                                            <i class="fa fa-tooth text-primary me-2"></i>Услуга
+                                        </label>
+                                        <div class="input-group custom-input-group">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-list text-primary"></i>
+                                            </span>
+                                            {{ form.service }}
+                                        </div>
+                                        {% if form.service.errors %}
+                                        <div class="text-danger mt-2">
+                                            <i class="fa fa-exclamation-circle me-1"></i>{{ form.service.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="id_doctor" class="form-label fw-bold">
+                                            <i class="fa fa-user-md text-primary me-2"></i>Врач
+                                        </label>
+                                        <div class="input-group custom-input-group">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-user-md text-primary"></i>
+                                            </span>
+                                            {{ form.doctor }}
+                                        </div>
+                                        {% if form.doctor.errors %}
+                                        <div class="text-danger mt-2">
+                                            <i class="fa fa-exclamation-circle me-1"></i>{{ form.doctor.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="id_note" class="form-label fw-bold">
+                                            <i class="fa fa-sticky-note text-primary me-2"></i>Дополнительные заметки
+                                        </label>
+                                        <div class="input-group custom-input-group">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-pen text-primary"></i>
+                                            </span>
+                                            {{ form.note }}
+                                        </div>
+                                        {% if form.note.errors %}
+                                        <div class="text-danger mt-2">
+                                            <i class="fa fa-exclamation-circle me-1"></i>{{ form.note.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary w-100 py-3 hover-card" type="submit">
+                            <i class="fa fa-save me-2"></i>Сохранить изменения
+                        </button>
+                    </form>
+
+                    <!-- Cancel/Reactivate Appointment -->
+                    <div class="border-top pt-4 mt-4">
+                        {% if is_cancelled %}
+                            <h4 class="mb-3 text-success">
+                                <i class="fa fa-check-circle me-2"></i>Восстановить запись
+                            </h4>
+                            <p class="text-muted mb-4">
+                                <i class="fa fa-info-circle me-2"></i>Вы можете восстановить отмененную запись.
+                            </p>
+                            <form method="post" onsubmit="return confirm('Вы уверены, что хотите восстановить запись?');">
+                                {% csrf_token %}
+                                <button class="btn btn-success w-100 py-3 hover-card" type="submit" name="action" value="reactivate">
+                                    <i class="fa fa-check me-2"></i>Восстановить запись
+                                </button>
+                            </form>
+                        {% else %}
+                            <h4 class="mb-3 text-danger">
+                                <i class="fa fa-exclamation-triangle me-2"></i>Отменить запись
+                            </h4>
+                            <p class="text-muted mb-4">
+                                <i class="fa fa-info-circle me-2"></i>Внимание! Это действие нельзя будет отменить.
+                            </p>
+                            <form method="post" onsubmit="return confirm('Вы уверены, что хотите отменить запись?');">
+                                {% csrf_token %}
+                                <button class="btn btn-danger w-100 py-3 hover-card" type="submit" name="action" value="cancel">
+                                    <i class="fa fa-times me-2"></i>Отменить запись
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Appointment Update Form End -->
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Initialize form validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+
+    // Initialize date picker if using tempusdominus
+    $(function () {
+        $('#id_date').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm',
+            minDate: moment(),
+            icons: {
+                time: 'fa fa-clock',
+                date: 'fa fa-calendar',
+                up: 'fa fa-arrow-up',
+                down: 'fa fa-arrow-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-calendar-check',
+                clear: 'fa fa-trash',
+                close: 'fa fa-times'
+            }
+        });
+    });
+</script>
+
+<style>
+    /* Custom styles for form elements */
+    .form-control, .form-select {
+        border: 2px solid #e0e0e0;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        border-radius: 0.5rem;
+        background-color: #fff;
+        color: #2C3E50;
+        width: 100%;
+        line-height: 1.5;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #00B98E;
+        box-shadow: 0 0 0 0.2rem rgba(0, 185, 142, 0.15);
+        background-color: #fff;
+    }
+
+    .custom-input-group {
+        position: relative;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        background-color: #fff;
+        display: flex;
+        align-items: stretch;
+    }
+
+    .custom-input-group .input-group-text {
+        border: 2px solid #e0e0e0;
+        border-right: none;
+        background-color: #fff;
+        padding: 0.75rem 1rem;
+        color: #00B98E;
+        min-width: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: auto;
+    }
+
+    .custom-input-group .form-control,
+    .custom-input-group .form-select {
+        border-left: none;
+        padding-left: 0.5rem;
+        height: 60px;
+        display: flex;
+        align-items: center;
+    }
+
+    .custom-input-group textarea.form-control {
+        height: 120px;
+        resize: none;
+        padding-top: 1rem;
+        align-items: flex-start;
+    }
+
+    .custom-input-group textarea.form-control + .input-group-text {
+        height: 120px;
+        align-items: flex-start;
+        padding-top: 1rem;
+    }
+
+    .custom-input-group .form-control:focus,
+    .custom-input-group .form-select:focus {
+        border-color: #00B98E;
+    }
+
+    .custom-input-group .form-control:focus + .input-group-text,
+    .custom-input-group .form-select:focus + .input-group-text {
+        border-color: #00B98E;
+    }
+
+    .form-label {
+        margin-bottom: 0.75rem;
+        color: #2C3E50;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .hover-card {
+        transition: all 0.3s ease;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn {
+        transition: all 0.3s ease;
+        border-radius: 0.5rem;
+        font-weight: 600;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card {
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+
+    /* Custom styles for select2 if used */
+    .select2-container--default .select2-selection--single {
+        height: 60px;
+        border: 2px solid #e0e0e0;
+        border-radius: 0.5rem;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 60px;
+        padding-left: 1rem;
+        color: #2C3E50;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 58px;
+    }
+
+    .select2-container--default .select2-selection--single:focus {
+        border-color: #00B98E;
+        box-shadow: 0 0 0 0.2rem rgba(0, 185, 142, 0.15);
+    }
+
+    /* Custom styles for datetime picker */
+    .bootstrap-datetimepicker-widget {
+        border-radius: 0.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border: none;
+        padding: 1rem;
+    }
+
+    .bootstrap-datetimepicker-widget table td.active,
+    .bootstrap-datetimepicker-widget table td.active:hover {
+        background-color: #00B98E;
+    }
+
+    .bootstrap-datetimepicker-widget .datepicker-days table td.active {
+        background-color: #00B98E;
+        color: #fff;
+    }
+
+    .bootstrap-datetimepicker-widget .timepicker-hour,
+    .bootstrap-datetimepicker-widget .timepicker-minute {
+        color: #2C3E50;
+    }
+
+    /* Error message styling */
+    .text-danger {
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: #dc3545;
+    }
+
+    .text-danger i {
+        font-size: 1rem;
+    }
+
+    /* Placeholder styling */
+    ::placeholder {
+        color: #adb5bd;
+        opacity: 1;
+    }
+
+    :-ms-input-placeholder {
+        color: #adb5bd;
+    }
+
+    ::-ms-input-placeholder {
+        color: #adb5bd;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .container {
+            padding: 1rem;
+        }
+        
+        .card {
+            border-radius: 0.5rem;
+        }
+        
+        .form-control, .form-select, .input-group-text {
+            font-size: 0.95rem;
+            padding: 0.75rem 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1rem;
+        }
+
+        .custom-input-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            font-size: 0.95rem;
+        }
+
+        .custom-input-group .input-group-text,
+        .custom-input-group .form-control,
+        .custom-input-group .form-select {
+            height: 55px;
+        }
+
+        .custom-input-group textarea.form-control,
+        .custom-input-group textarea.form-control + .input-group-text {
+            height: 100px;
+        }
+    }
+</style>
+{% endblock %}

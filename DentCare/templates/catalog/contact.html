@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block links %}
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=c3427b60-6891-4d79-9982-d4092ee76b3a"></script>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Start -->
+<div class="container-fluid bg-primary py-5 hero-header mb-5">
+    <div class="row py-3">
+        <div class="col-12 text-center">
+            <h1 class="display-3 text-white animated zoomIn">Контакты</h1>
+            <a href="{% url 'index' %}" class="h4 text-white">Главная</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a href="{% url 'contact' %}" class="h4 text-white">Контакты</a>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+
+<!-- Контакты Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-xl-6 col-lg-6 wow slideInUp" data-wow-delay="0.1s">
+                <div class="bg-light rounded h-100 p-5">
+                    <div class="section-title">
+                        <h5 class="position-relative d-inline-block text-primary text-uppercase">Контакты</h5>
+                        <h1 class="display-6 mb-4">Не стесняйтесь связываться с нами</h1>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-geo-alt fs-1 text-primary me-3"></i>
+                        <div class="text-start">
+                            <h5 class="mb-0">Наш оффис</h5>
+                            <span>Курск, Красная площадь 8</span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-envelope-open fs-1 text-primary me-3"></i>
+                        <div class="text-start">
+                            <h5 class="mb-0">Пишите нам</h5>
+                            <span>DentCare@mail.ru</span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-phone-vibrate fs-1 text-primary me-3"></i>
+                        <div class="text-start">
+                            <h5 class="mb-0">Номер для связи:</h5>
+                            <span>+7 (999) 999-99-99</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-12 wow slideInUp" data-wow-delay="0.6s">
+                <!-- <a href="https://yandex.ru/maps?utm_medium=mapframe&utm_source=maps" style="color:#eee;font-size:12px;position:absolute;top:0px;">Яндекс Карты</a> -->
+                <!-- <a href="https://yandex.ru/maps/?ll=35.974743%2C51.650684&utm_medium=mapframe&utm_source=maps&z=14" style="color:#eee;font-size:12px;position:absolute;top:14px;">Яндекс Карты — транспорт, навигация, поиск мест</a> -->
+                <div id="map" style="width: 100%; height: 500px;"></div>
+
+                <script type="text/javascript">
+                    ymaps.ready(init);
+                    
+                    function init() {
+                        var myMap = new ymaps.Map("map", {
+                            center: [51.730830, 36.191155],
+                            zoom: 15
+                        });
+                        
+                        var myPlacemark = new ymaps.Placemark([51.730830, 36.191155], {
+                            hintContent: 'Ваш объект',
+                            balloonContent: 'Подробная информация'
+                        });
+                        
+                        myMap.geoObjects.add(myPlacemark);
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Контакты End -->
+
+
+{% endblock %}

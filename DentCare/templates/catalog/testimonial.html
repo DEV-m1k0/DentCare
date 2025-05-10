@@ -1,0 +1,95 @@
+{% extends "base.html" %} 
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid bg-primary py-5 hero-header mb-5">
+        <div class="row py-3">
+            <div class="col-12 text-center">
+                <h1 class="display-3 text-white animated zoomIn">Отзывы</h1>
+                <a href="{% url 'index' %}" class="h4 text-white">Главная</a>
+                <i class="far fa-circle text-white px-2"></i>
+                <a href="{% url 'testimonial' %}" class="h4 text-white">Отзывы</a>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+    <!-- Testimonials Start -->
+    <div class="container-fluid py-5">
+        <div class="container">
+            <!-- Add Comment Section -->
+            {% if user.is_authenticated %}
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8">
+                    <div class="bg-light rounded p-5 shadow-sm">
+                        <h2 class="mb-4">Оставить отзыв</h2>
+                        <form method="post" action="{% url 'add-testimonial' %}">
+                            {% csrf_token %}
+                            <div class="mb-4">
+                                <label for="id_text" class="form-label">Ваш отзыв</label>
+                                <textarea name="text" id="id_text" class="form-control" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary py-3 px-5">
+                                <i class="fa fa-paper-plane me-2"></i>Отправить отзыв
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8">
+                    <div class="bg-light rounded p-5 shadow-sm text-center">
+                        <h3 class="mb-3">Хотите оставить отзыв?</h3>
+                        <p class="mb-4">Пожалуйста, войдите в систему, чтобы оставить свой отзыв.</p>
+                        <a href="{% url 'login' %}" class="btn btn-primary py-3 px-5">
+                            <i class="fa fa-sign-in-alt me-2"></i>Войти
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Comments Display Section -->
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4 text-center">Отзывы наших клиентов</h2>
+                </div>
+            </div>
+            <div class="row g-4">
+                {% for comment in comments %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="bg-light rounded p-4 shadow-sm h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                <i class="fa fa-user-circle fa-3x text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="mb-1">{{ comment.name }}</h5>
+                            </div>
+                        </div>
+                        <p class="mb-0">{{ comment.text }}</p>
+                        {% if user.is_manager or user.is_admin %}
+                            <div class="mt-3">
+                                <form action="{% url 'testimonial' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                                    <button type="submit" class="btn btn-outline-danger w-100">Удалить</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="text-center py-5">
+                        <i class="fa fa-comments fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">Пока нет отзывов</h4>
+                        <p class="text-muted">Будьте первым, кто оставит отзыв!</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Testimonials End -->
+{% endblock content %}

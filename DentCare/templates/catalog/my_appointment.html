@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Hero Start -->
+<div class="container-fluid bg-primary py-5 hero-header mb-5">
+    <div class="row py-3">
+        <div class="col-12 text-center">
+            <h1 class="display-3 text-white animated zoomIn">Мои записи</h1>
+            <a href="{% url 'index' %}" class="h4 text-white">Главная</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a href="{% url 'my-appointment' %}" class="h4 text-white">Мои записи</a>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+<!-- Appointments Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <!-- Future Appointments -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="bg-light rounded p-4">
+                    <h2 class="mb-4">
+                        <i class="fa fa-calendar-check text-primary me-2"></i>
+                        Ожидаемые записи
+                    </h2>
+                    {% if future_appointments %}
+                    <div class="row g-4">
+                        {% for appointment in future_appointments %}
+                        <div class="col-lg-4 col-md-6">
+                            <a href="{% url 'my-appointment-edit' appointment.pk %}" class="text-decoration-none">
+                                <div class="card h-100 border-0 shadow-sm hover-card">
+                                    <div class="card-body p-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h4 class="card-title mb-0 text-dark">{{appointment.service}}</h4>
+                                            <span class="badge bg-primary">Ожидается</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <p class="mb-2 text-dark">
+                                                <i class="fa fa-user text-primary me-2"></i>
+                                                {{appointment.user.get_full_name}}
+                                            </p>
+                                            {% if appointment.doctor %}
+                                            <p class="mb-2 text-dark">
+                                                <i class="fa fa-user-md text-primary me-2"></i>
+                                                {{appointment.doctor.name}} {{appointment.doctor.last_name}}
+                                            </p>
+                                            {% else %}
+                                            <p class="mb-2 text-muted">
+                                                <i class="fa fa-user-md me-2"></i>
+                                                Врач не назначен
+                                            </p>
+                                            {% endif %}
+                                            <p class="mb-2 text-dark">
+                                                <i class="fa fa-clock text-primary me-2"></i>
+                                                {{appointment.date|date:"d.m.Y H:i"}}
+                                            </p>
+                                        </div>
+                                        {% if appointment.was_rescheduled %}
+                                        <div class="alert alert-warning mb-0">
+                                            <i class="fa fa-exclamation-triangle me-2"></i>
+                                            Запись была перенесена
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fa fa-calendar-times fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">У вас нет ожидающихся записей</h4>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Past Appointments -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="bg-light rounded p-4">
+                    <h2 class="mb-4">
+                        <i class="fa fa-history text-primary me-2"></i>
+                        Состоявшиеся записи
+                    </h2>
+                    {% if past_appointments %}
+                    <div class="row g-4">
+                        {% for appointment in past_appointments %}
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h4 class="card-title mb-0">{{appointment.service}}</h4>
+                                        <span class="badge bg-success">Завершено</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <p class="mb-2">
+                                            <i class="fa fa-user text-primary me-2"></i>
+                                            {{appointment.user.get_full_name}}
+                                        </p>
+                                        {% if appointment.doctor %}
+                                        <p class="mb-2">
+                                            <i class="fa fa-user-md text-primary me-2"></i>
+                                            {{appointment.doctor.name}} {{appointment.doctor.last_name}}
+                                        </p>
+                                        {% else %}
+                                        <p class="mb-2 text-muted">
+                                            <i class="fa fa-user-md me-2"></i>
+                                            Врач не назначен
+                                        </p>
+                                        {% endif %}
+                                        <p class="mb-2">
+                                            <i class="fa fa-clock text-primary me-2"></i>
+                                            {{appointment.date|date:"d.m.Y H:i"}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fa fa-calendar-check fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">У вас нет состоявшихся записей</h4>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Cancelled Appointments -->
+        <div class="row">
+            <div class="col-12">
+                <div class="bg-light rounded p-4">
+                    <h2 class="mb-4">
+                        <i class="fa fa-calendar-times text-primary me-2"></i>
+                        Отмененные записи
+                    </h2>
+                    {% if cancelled_appointments %}
+                    <div class="row g-4">
+                        {% for appointment in cancelled_appointments %}
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h4 class="card-title mb-0">{{appointment.service}}</h4>
+                                        <span class="badge bg-danger">Отменено</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <p class="mb-2">
+                                            <i class="fa fa-user text-primary me-2"></i>
+                                            {{appointment.user.get_full_name}}
+                                        </p>
+                                        {% if appointment.doctor %}
+                                        <p class="mb-2">
+                                            <i class="fa fa-user-md text-primary me-2"></i>
+                                            {{appointment.doctor.name}} {{appointment.doctor.last_name}}
+                                        </p>
+                                        {% else %}
+                                        <p class="mb-2 text-muted">
+                                            <i class="fa fa-user-md me-2"></i>
+                                            Врач не назначен
+                                        </p>
+                                        {% endif %}
+                                        <p class="mb-2">
+                                            <i class="fa fa-clock text-primary me-2"></i>
+                                            {{appointment.date|date:"d.m.Y H:i"}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fa fa-calendar-times fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">У вас нет отмененных записей</h4>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Appointments End -->
+
+<style>
+.hover-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    cursor: pointer;
+}
+</style>
+{% endblock %}

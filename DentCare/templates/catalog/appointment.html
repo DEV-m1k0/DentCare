@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Hero Start -->
+<div class="container-fluid bg-primary py-5 hero-header mb-5">
+    <div class="row py-3">
+        <div class="col-12 text-center">
+            <h1 class="display-3 text-white animated zoomIn">Запись на приём</h1>
+            <a href="{% url 'index' %}" class="h4 text-white">Главная</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a href="{% url 'appointment' %}" class="h4 text-white">Запись</a>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+<!-- Appointment Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="bg-light rounded p-5">
+                    <h1 class="mb-4">Записаться на приём</h1>
+                    {% if user.is_authenticated %}
+                    <form method="post" id="appointmentForm">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <select class="form-select" id="serviceSelect" name="service" required>
+                                        <option value="">Выберите услугу</option>
+                                        {% for service in services %}
+                                            <option value="{{ service.id }}">{{ service.title }} - {{ service.price }} ₽</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="serviceSelect">Выберите услугу</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary w-100 py-3" type="button" id="selectDoctorBtn" disabled>
+                                    Выбрать врача и дату
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {% else %}
+                    <div class="text-center">
+                        <h3 class="mb-4">Для записи на приём необходимо авторизоваться</h3>
+                        <a href="{% url 'login' %}" class="btn btn-primary me-3">Войти</a>
+                        <a href="{% url 'register' %}" class="btn btn-outline-primary">Зарегистрироваться</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-light rounded p-5">
+                    <h1 class="mb-4">Почему выбирают нас?</h1>
+                    <div class="d-flex flex-column">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="flex-shrink-0">
+                                <i class="fa fa-check-circle text-primary fa-2x"></i>
+                            </div>
+                            <div class="ms-4">
+                                <h5 class="mb-1">Профессиональные врачи</h5>
+                                <p class="mb-0">Наши специалисты имеют многолетний опыт работы</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="flex-shrink-0">
+                                <i class="fa fa-check-circle text-primary fa-2x"></i>
+                            </div>
+                            <div class="ms-4">
+                                <h5 class="mb-1">Современное оборудование</h5>
+                                <p class="mb-0">Используем новейшие технологии в стоматологии</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fa fa-check-circle text-primary fa-2x"></i>
+                            </div>
+                            <div class="ms-4">
+                                <h5 class="mb-1">Удобное расположение</h5>
+                                <p class="mb-0">Наша клиника находится в центре города</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Appointment End -->
+
+<!-- Doctor Selection Modal -->
+<div class="modal fade" id="doctorModal" tabindex="-1" aria-labelledby="doctorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="doctorModalLabel">Выбор врача и даты</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="doctorSelectionForm">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <select class="form-select" id="doctorSelect" required>
+                                    <option value="">Выберите врача</option>
+                                </select>
+                                <label for="doctorSelect">Врач</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input type="datetime-local" class="form-control" id="appointmentDate" required>
+                                <label for="appointmentDate">Дата и время</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" id="saveAppointment">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const serviceSelect = document.querySelector('#serviceSelect');
+    const selectDoctorBtn = document.querySelector('#selectDoctorBtn');
+    const doctorModal = new bootstrap.Modal(document.getElementById('doctorModal'));
+    const doctorSelect = document.querySelector('#doctorSelect');
+    const appointmentDate = document.querySelector('#appointmentDate');
+    const saveAppointmentBtn = document.querySelector('#saveAppointment');
+    const appointmentForm = document.querySelector('#appointmentForm');
+
+    // Enable/disable doctor selection button based on service selection
+    serviceSelect.addEventListener('change', function() {
+        console.log('Service selected:', this.value); // Debug log
+        selectDoctorBtn.disabled = !this.value;
+        console.log('Button disabled:', selectDoctorBtn.disabled); // Debug log
+    });
+
+    // Set initial button state
+    selectDoctorBtn.disabled = !serviceSelect.value;
+
+    // Open modal when clicking the doctor selection button
+    selectDoctorBtn.addEventListener('click', function() {
+        const serviceId = serviceSelect.value;
+        console.log('Opening modal for service:', serviceId); // Debug log
+        if (serviceId) {
+            // Fetch available doctors for the selected service
+            fetch(`/api/services/${serviceId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Received service data:', data); // Debug log
+                    // Clear existing options
+                    doctorSelect.innerHTML = '<option value="">Выберите врача</option>';
+                    
+                    // Add new options for each doctor
+                    if (data.doctor && data.doctor.length > 0) {
+                        data.doctor.forEach(doctor => {
+                            const option = document.createElement('option');
+                            option.value = doctor.id;
+                            option.textContent = `${doctor.name} ${doctor.last_name}`;
+                            doctorSelect.appendChild(option);
+                        });
+                    } else {
+                        console.log('No doctors available for this service');
+                        alert('Нет доступных врачей для этой услуги');
+                    }
+                    
+                    doctorModal.show();
+                })
+                .catch(error => {
+                    console.error('Error fetching doctors:', error); // Debug log
+                    alert('Ошибка при загрузке списка врачей');
+                });
+        }
+    });
+
+    // Save appointment
+    saveAppointmentBtn.addEventListener('click', function() {
+        const serviceId = serviceSelect.value;
+        const doctorId = doctorSelect.value;
+        const date = appointmentDate.value;
+
+        console.log('Saving appointment with data:', {
+            serviceId,
+            doctorId,
+            date
+        });
+
+        if (serviceId && doctorId && date) {
+            const formData = new FormData();
+            formData.append('service', serviceId);
+            formData.append('date', date);
+            formData.append('doctor', doctorId);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+
+            // Log the FormData contents
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
+            fetch('{% url "appointment" %}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '{% url "my-appointment" %}';
+                } else {
+                    response.text().then(text => {
+                        console.error('Server response:', text);
+                        alert(text || 'Ошибка при сохранении записи');
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                alert(error.message);
+            });
+        } else {
+            console.error('Missing required fields:', {
+                serviceId: !!serviceId,
+                doctorId: !!doctorId,
+                date: !!date
+            });
+            alert('Пожалуйста, заполните все поля');
+        }
+    });
+});
+</script>
+{% endblock %}

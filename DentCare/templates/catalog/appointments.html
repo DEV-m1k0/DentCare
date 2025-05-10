@@ -1,0 +1,101 @@
+{% extends 'catalog/base_admin.html' %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2><i class="fa fa-calendar-check me-2"></i>Управление записями</h2>
+    </div>
+</div>
+
+<div class="row">
+    {% for appointment in appointments %}
+    <div class="col-12 col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm hover-shadow">
+            <div class="card-header bg-white border-bottom-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fa fa-user-circle text-primary me-2"></i>
+                        {% if appointment.name %}
+                            {{ appointment.name }}
+                        {% else %}
+                            {{ appointment.user.get_full_name }}
+                        {% endif %}
+                    </h5>
+                    <span class="badge bg-primary rounded-pill">
+                        {{ appointment.date|date:"d.m.Y" }}
+                    </span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fa fa-tooth text-success me-2"></i>
+                        <span class="fw-bold">Услуга:</span>
+                        <span class="ms-2">{{ appointment.service }}</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fa fa-user-md text-info me-2"></i>
+                        <span class="fw-bold">Врач:</span>
+                        <span class="ms-2">{{ appointment.dentist }}</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fa fa-clock text-warning me-2"></i>
+                        <span class="fw-bold">Время:</span>
+                        <span class="ms-2">{{ appointment.time }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-top-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{% url 'appointment-update' pk=appointment.id %}" 
+                       class="btn btn-outline-primary btn-sm">
+                        <i class="fa fa-edit me-1"></i>Редактировать
+                    </a>
+                    <form method="post" action="{% url 'appointment-cancel' pk=appointment.id %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i class="fa fa-times me-1"></i>Отменить
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-body text-center py-5">
+                <i class="fa fa-calendar-times fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">Записи не найдены</h4>
+                <p class="text-muted mb-0">На данный момент нет активных записей</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .hover-shadow {
+        transition: all 0.3s ease;
+    }
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+    .card {
+        border-radius: 0.5rem;
+        border: 1px solid rgba(0,0,0,.125);
+    }
+    .card-header {
+        border-radius: 0.5rem 0.5rem 0 0 !important;
+    }
+    .badge {
+        font-size: 0.8rem;
+        padding: 0.5em 1em;
+    }
+    .btn-sm {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}

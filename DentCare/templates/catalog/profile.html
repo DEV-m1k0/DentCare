@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Hero Start -->
+<div class="container-fluid bg-primary py-5 hero-header mb-5">
+    <div class="row py-3">
+        <div class="col-12 text-center">
+            <h1 class="display-3 text-white animated zoomIn">Профиль</h1>
+            <a href="{% url 'index' %}" class="h4 text-white">Главная</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a href="{% url 'profile' %}" class="h4 text-white">Профиль</a>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+<!-- Profile Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Profile Information -->
+            <div class="col-lg-6">
+                <div class="bg-light rounded p-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="mb-0">Личная информация</h2>
+                        <a href="{% url 'profile-edit' %}" class="btn btn-primary">
+                            <i class="fa fa-edit me-2"></i>Редактировать
+                        </a>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="text-muted">Имя</label><br>
+                            <h5>{{ user.first_name }}</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted">Фамилия</label><br>
+                            <h5>{{ user.last_name }}</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted">Отчество</label><br>
+                            <h5>{{ user.patronymic|default:"Не указано" }}</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted">Email</label><br>
+                            <h5>{{ user.email }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Statistics -->
+            <div class="col-lg-6">
+                <div class="bg-light rounded p-5">
+                    <h2 class="mb-4">Статистика</h2>
+                    <div class="row g-4">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fa fa-calendar-check fa-3x text-primary me-3"></i>
+                                <div>
+                                    <h4 class="mb-1">{{ appointments.count }}</h4>
+                                    <p class="mb-0">Всего записей</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fa fa-user-md fa-3x text-primary me-3"></i>
+                                <div>
+                                    <h4 class="mb-1">{{ user.username }}</h4>
+                                    <p class="mb-0">Имя пользователя</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Appointments -->
+                <div class="bg-light rounded p-5 mt-4">
+                    <h2 class="mb-4">Последние записи</h2>
+                    {% if appointments %}
+                        {% for appointment in appointments|slice:":3" %}
+                        <div class="d-flex align-items-center border-bottom py-3">
+                            <div class="flex-shrink-0">
+                                <i class="fa fa-calendar-alt fa-2x text-primary"></i>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-1">{{ appointment.service }}</h6>
+                                <small>{{ appointment.date|date:"d.m.Y H:i" }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">У вас пока нет записей</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Profile End -->
+{% endblock %} 

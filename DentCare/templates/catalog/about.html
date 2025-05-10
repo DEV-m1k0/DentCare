@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Hero Start -->
+<div class="container-fluid bg-primary py-5 hero-header mb-5">
+    <div class="row py-3">
+        <div class="col-12 text-center">
+            <h1 class="display-3 text-white animated zoomIn">О компании</h1>
+            <a href="{% url 'index' %}" class="h4 text-white">Главная</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a href="{% url 'about' %}" class="h4 text-white">О компании</a>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+
+<!-- О компании Start -->
+<div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-7">
+                <div class="section-title mb-4">
+                    <h5 class="position-relative d-inline-block text-primary text-uppercase">О компании</h5>
+                    <h1 class="display-5 mb-0">Лучшая стоматологическая клиника в мире, Которой Вы можете Доверять</h1>
+                </div>
+                <h4 class="text-body fst-italic mb-4">Если вы задумались о здоровых зубах и привлекательной улыбке, наша
+                    клиника - именно то место, куда стоит обратиться</h4>
+                <p class="mb-4">Инновационные технологии для вашей идеальной улыбки. DEntCare – это клиника, оснащенная
+                    самым современным оборудованием и использующая передовые методики лечения. Мы предлагаем полный
+                    спектр стоматологических услуг, от профилактического осмотра до сложных имплантаций. Доверьте
+                    здоровье своих зубов профессионалам!</p>
+                <div class="row g-3">
+                    <div class="col-sm-6 wow zoomIn" data-wow-delay="0.3s">
+                        <h5 class="mb-3"><i class="fa fa-check-circle text-primary me-3"></i>Отмеченный наградами</h5>
+                        <h5 class="mb-3"><i class="fa fa-check-circle text-primary me-3"></i>Высококвалифицированный
+                            персонал</h5>
+                    </div>
+                    <div class="col-sm-6 wow zoomIn" data-wow-delay="0.6s">
+                        <h5 class="mb-3"><i class="fa fa-check-circle text-primary me-3"></i>24/7</h5>
+                        <h5 class="mb-3"><i class="fa fa-check-circle text-primary me-3"></i>Справедливые Цены</h5>
+                    </div>
+                </div>
+                <a href="{% url 'appointment' %}" class="btn btn-primary py-3 px-5 mt-4 wow zoomIn"
+                    data-wow-delay="0.6s">Записаться</a>
+            </div>
+            <div class="col-lg-5" style="min-height: 500px;">
+                <div class="position-relative h-100">
+                    <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s"
+                        src="/static/img/about.jpg" style="object-fit: cover;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- О компании End -->
+
+{% endblock content %}

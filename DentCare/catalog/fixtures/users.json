@@ -1,0 +1,62 @@
+[
+    {
+        "model": "catalog.userprofile",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$9QEnChdQCnfw8xrDelee68$xlnPlnk+Sbb5PEXOThxRyPdSAjc349OtTM9yuwdAjRI=",
+            "last_login": null,
+            "is_superuser": true,
+            "username": "admin",
+            "first_name": "Администратор",
+            "last_name": "Системы",
+            "email": "admin@example.com",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2024-01-01T00:00:00Z",
+            "patronymic": null,
+            "groups": [],
+            "user_permissions": [],
+            "role": "admin"
+        }
+    },
+    {
+        "model": "catalog.userprofile",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$0nolpiCf6HDeguT9so15SA$nEC2MzkFRVdqolpQEECluLN9r6/whCzt5RL1aDUGaVM=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "manager",
+            "first_name": "Менеджер",
+            "last_name": "Отдела",
+            "email": "manager@example.com",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2024-01-01T00:00:00Z",
+            "patronymic": null,
+            "groups": [],
+            "user_permissions": [],
+            "role": "manager"
+        }
+    },
+    {
+        "model": "catalog.userprofile",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$WkQY0p4mHSzd3srPSxrdyG$FzUvGPl9fYCrEeminnLW1DvfBRvl1XJyfh3PLo6lHyY=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "user",
+            "first_name": "Пользователь",
+            "last_name": "Обычный",
+            "email": "user@example.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2024-01-01T00:00:00Z",
+            "patronymic": null,
+            "groups": [],
+            "user_permissions": [],
+            "role": "user"
+        }
+    }
+] 

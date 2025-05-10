@@ -1,0 +1,23 @@
+[
+    {
+        "model": "catalog.condition",
+        "pk": 1,
+        "fields": {
+            "title": "Запланирована"
+        }
+    },
+    {
+        "model": "catalog.condition",
+        "pk": 2,
+        "fields": {
+            "title": "Завершена"
+        }
+    },
+    {
+        "model": "catalog.condition",
+        "pk": 3,
+        "fields": {
+            "title": "Отменена"
+        }
+    }
+] 

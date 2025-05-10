@@ -1,0 +1,247 @@
+{% extends 'catalog/base_manager.html' %}
+{% load static %}
+
+{% block title %}Редактирование записи{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h2>
+            <i class="fa fa-edit me-2"></i>Редактирование записи
+            <small class="text-muted">{{ appointment.user.get_full_name }}</small>
+        </h2>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="{% url 'appointment-history-client' appointment.user.pk %}" class="btn btn-outline-secondary">
+            <i class="fa fa-arrow-left me-2"></i>Назад к истории записей
+        </a>
+    </div>
+</div>
+
+{% if messages %}
+<div class="messages mb-4">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Дата и время -->
+                    <div class="mb-4">
+                        <label for="{{ form.date.id_for_label }}" class="form-label">Дата и время</label>
+                        {{ form.date }}
+                        {% if form.date.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.date.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Услуга -->
+                    <div class="mb-4">
+                        <label for="{{ form.service.id_for_label }}" class="form-label">Услуга</label>
+                        {{ form.service }}
+                        {% if form.service.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.service.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Врач -->
+                    <div class="mb-4">
+                        <label for="{{ form.doctor.id_for_label }}" class="form-label">Врач</label>
+                        {{ form.doctor }}
+                        {% if form.doctor.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.doctor.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Заметки -->
+                    <div class="mb-4">
+                        <label for="{{ form.note.id_for_label }}" class="form-label">Заметки</label>
+                        {{ form.note }}
+                        {% if form.note.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.note.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Кнопки действий -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save me-2"></i>Сохранить изменения
+                        </button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                            <i class="fa fa-times me-2"></i>Отменить запись
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Информация о записи -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Информация о записи</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6 class="text-muted mb-2">Текущий статус</h6>
+                    {% if appointment.condition.id == 1 %}
+                    <span class="badge bg-primary">Запланировано</span>
+                    {% elif appointment.condition.id == 2 %}
+                    <span class="badge bg-success">Завершено</span>
+                    {% else %}
+                    <span class="badge bg-danger">Отменено</span>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-muted mb-2">Дата создания</h6>
+                    <p class="mb-0">{{ appointment.date|date:"d.m.Y H:i" }}</p>
+                </div>
+                {% if appointment.was_rescheduled %}
+                <div class="alert alert-warning">
+                    <i class="fa fa-exclamation-triangle me-2"></i>
+                    Запись была перенесена
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Информация о клиенте -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Информация о клиенте</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6 class="text-muted mb-2">ФИО</h6>
+                    <p class="mb-0">{{ appointment.user.get_full_name }}</p>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-muted mb-2">Email</h6>
+                    <p class="mb-0">{{ appointment.user.email }}</p>
+                </div>
+                <div>
+                    <h6 class="text-muted mb-2">Телефон</h6>
+                    <p class="mb-0">{{ appointment.user.phone|default:"Не указан" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно отмены записи -->
+<div class="modal fade" id="cancelModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Отмена записи</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены, что хотите отменить эту запись?</p>
+                <form method="post" action="{% url 'appointment-cancel' appointment.pk %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="cancel_reason" class="form-label">Причина отмены</label>
+                        <textarea class="form-control" id="cancel_reason" name="note" rows="3" required></textarea>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-danger">Отменить запись</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control, .form-select {
+        height: 45px;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #dee2e6;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    
+    textarea.form-control {
+        height: auto;
+        min-height: 100px;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+    }
+    
+    .badge {
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        border-radius: 0.5rem;
+    }
+    
+    .card {
+        border: none;
+        border-radius: 1rem;
+    }
+    
+    .card-header {
+        border-bottom: 1px solid rgba(0,0,0,.125);
+        border-radius: 1rem 1rem 0 0 !important;
+    }
+    
+    .alert {
+        border-radius: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+        .d-flex.gap-2 {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+    }
+</style>
+
+<script>
+    // Валидация формы
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}

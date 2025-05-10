@@ -1,0 +1,62 @@
+[
+    {
+        "model": "catalog.service",
+        "pk": 1,
+        "fields": {
+            "title": "Консультация",
+            "price": 1000,
+            "doctor": [1, 2, 3, 4, 5],
+            "description": "Первичный осмотр и консультация стоматолога",
+            "stoplist": false,
+            "photo": "base/no-image.jpg"
+        }
+    },
+    {
+        "model": "catalog.service",
+        "pk": 2,
+        "fields": {
+            "title": "Лечение кариеса",
+            "price": 5000,
+            "doctor": [2],
+            "description": "Лечение кариеса с использованием современных материалов",
+            "stoplist": false,
+            "photo": "base/no-image.jpg"
+        }
+    },
+    {
+        "model": "catalog.service",
+        "pk": 3,
+        "fields": {
+            "title": "Протезирование",
+            "price": 25000,
+            "doctor": [3],
+            "description": "Установка зубных протезов",
+            "stoplist": false,
+            "photo": "base/no-image.jpg"
+        }
+    },
+    {
+        "model": "catalog.service",
+        "pk": 4,
+        "fields": {
+            "title": "Имплантация",
+            "price": 35000,
+            "doctor": [1, 4],
+            "description": "Установка зубных имплантов",
+            "stoplist": false,
+            "photo": "base/no-image.jpg"
+        }
+    },
+    {
+        "model": "catalog.service",
+        "pk": 5,
+        "fields": {
+            "title": "Исправление прикуса",
+            "price": 45000,
+            "doctor": [5],
+            "description": "Установка брекет-системы и исправление прикуса",
+            "stoplist": false,
+            "photo": "base/no-image.jpg"
+        }
+    }
+] 

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="container">
+        <h1 class="text-center mb-5 display-4">Наши специалисты</h1>
+        
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for doctor in doctors %}
+            <div class="col">
+                <div class="card h-100 doctor-card shadow">
+                    <div class="card-img-top-container">
+                        {% if doctor.photo %}
+                        <img src="{{ doctor.photo.url }}" class="card-img-top doctor-photo" alt="{{ doctor.get_full_name }}">
+                        {% else %}
+                        <div class="no-photo-placeholder">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title h5">{{ doctor.last_name }} {{ doctor.name }}</h3>
+                        <p class="text-muted mb-2">{{ doctor.position }}</p>
+                        <p class="card-text">{{ doctor.about|truncatechars:150 }}</p>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'doctor-detail' doctor.id %}" class="btn btn-primary btn-sm">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

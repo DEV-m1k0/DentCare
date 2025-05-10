@@ -1,0 +1,25 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row py-1">
+        <a href="{% url 'appointment-history' %}" style="color: #06A3DA;; font-size: 24px; background-color: white; font-family: 'Jost', sans-serif;">Вернуться к выбору клиента</a>
+        <a href="/appointment_history/{{client.id}}/" style="color: #06A3DA;; font-size: 24px; background-color: white; font-family: 'Jost', sans-serif;">Вернуться к записям клиента</a>
+    </div>
+    <div class="row my-3">
+        {% for appointment in past_appointments %}
+        <div class="col my-1">
+            <div class="card mx-sm-1 my-1 border border-2 border-dark" style="width: 15rem; height: 17rem; padding-top: 5px; background-color: rgb(155, 222, 248);">
+                <div class="card-text text-center" style="font-family: 'Jost', sans-serif; color: black;">
+                    <p style="font-size: 24px;">Клиент: {{appointment.user.get_full_name}}</p>
+                    <p>Услуга: {{appointment.service}}</p>
+                    <p>Врач: {{appointment.dentist}} </p>
+                    <p>Дата записи: {{appointment.date}}</p>
+                    <p>Время: {{appointment.time}}</p>
+                    <p>Статус:{{appointment.condition}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

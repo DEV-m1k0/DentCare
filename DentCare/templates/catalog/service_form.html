@@ -1,0 +1,392 @@
+{% extends 'catalog/base_manager.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h2>
+            <i class="fa fa-medkit me-2"></i>{{ title }}
+        </h2>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="{% url 'services' %}" class="btn btn-outline-secondary">
+            <i class="fa fa-arrow-left me-2"></i>Назад к списку услуг
+        </a>
+    </div>
+</div>
+
+{% if messages %}
+<div class="messages mb-4">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <!-- Название услуги -->
+                        <div class="col-md-6 mb-4">
+                            <label for="{{ form.title.id_for_label }}" class="form-label fw-bold">Название услуги</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="fa fa-medkit text-primary"></i>
+                                </span>
+                                {{ form.title }}
+                            </div>
+                            {% if form.title.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.title.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Стоимость -->
+                        <div class="col-md-6 mb-4">
+                            <label for="{{ form.price.id_for_label }}" class="form-label fw-bold">Стоимость (₽)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="fa fa-ruble-sign text-primary"></i>
+                                </span>
+                                {{ form.price }}
+                            </div>
+                            {% if form.price.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.price.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Описание -->
+                    <div class="mb-4">
+                        <label for="{{ form.description.id_for_label }}" class="form-label fw-bold">Описание услуги</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 align-items-start pt-3">
+                                <i class="fa fa-align-left text-primary"></i>
+                            </span>
+                            {{ form.description }}
+                        </div>
+                        {% if form.description.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.description.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Фотография -->
+                    <div class="mb-4">
+                        <label for="{{ form.photo.id_for_label }}" class="form-label fw-bold">Фотография услуги</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fa fa-image text-primary"></i>
+                            </span>
+                            {{ form.photo }}
+                        </div>
+                        <div class="form-text mt-2">
+                            <i class="fa fa-info-circle me-1"></i>
+                            Рекомендуемый размер: 800x600 пикселей
+                        </div>
+                        {% if form.photo.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.photo.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Врачи -->
+                    <div class="mb-4">
+                        <label for="{{ form.doctor.id_for_label }}" class="form-label fw-bold">Врачи, оказывающие услугу</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fa fa-user-md text-primary"></i>
+                            </span>
+                            {{ form.doctor }}
+                        </div>
+                        {% if form.doctor.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.doctor.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Кнопки действий -->
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="fa fa-save me-2"></i>Сохранить
+                        </button>
+                        <a href="{% url 'services' %}" class="btn btn-light px-4">
+                            <i class="fa fa-times me-2"></i>Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Информация -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="fa fa-info-circle me-2"></i>Информация
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6 class="text-muted mb-2">Рекомендации</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fa fa-check-circle text-success me-2"></i>
+                            Используйте качественное фото услуги
+                        </li>
+                        <li class="mb-2">
+                            <i class="fa fa-check-circle text-success me-2"></i>
+                            Заполните все обязательные поля
+                        </li>
+                        <li class="mb-2">
+                            <i class="fa fa-check-circle text-success me-2"></i>
+                            Добавьте подробное описание услуги
+                        </li>
+                        <li class="mb-2">
+                            <i class="fa fa-check-circle text-success me-2"></i>
+                            Выберите всех врачей, оказывающих услугу
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Предпросмотр фото -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="fa fa-image me-2"></i>Предпросмотр фото
+                </h5>
+            </div>
+            <div class="card-body text-center">
+                <div id="imagePreview" class="mb-3" style="display: none;">
+                    <img src="" alt="Preview" class="img-fluid rounded" style="max-height: 200px;">
+                </div>
+                <div id="noImage" class="text-muted">
+                    <i class="fa fa-image fa-3x mb-2"></i>
+                    <p class="mb-0">Фото не выбрано</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Input Styles */
+    .form-control, .form-select {
+        height: 45px;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #dee2e6;
+        background-color: #fff;
+        transition: all 0.2s ease-in-out;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #00B98E;
+        box-shadow: 0 0 0 0.25rem rgba(0, 185, 142, 0.15);
+        background-color: #fff;
+    }
+    
+    .input-group-text {
+        border-radius: 0.5rem 0 0 0.5rem;
+        border: 1px solid #dee2e6;
+        background-color: #f8f9fa;
+    }
+    
+    .input-group .form-control {
+        border-left: 0;
+        border-radius: 0 0.5rem 0.5rem 0;
+    }
+    
+    textarea.form-control {
+        height: auto;
+        min-height: 120px;
+        padding-top: 0.75rem;
+    }
+    
+    /* Select2 Customization */
+    .select2-container--default .select2-selection--multiple {
+        border: 1px solid #dee2e6;
+        border-radius: 0 0.5rem 0.5rem 0;
+        min-height: 45px;
+        padding: 0.25rem;
+    }
+    
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background-color: #00B98E;
+        border: none;
+        color: white;
+        border-radius: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        margin: 0.25rem;
+    }
+    
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+        color: white;
+        margin-right: 0.5rem;
+        border: none;
+    }
+    
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 0.25rem;
+    }
+    
+    .select2-container--default .select2-search--inline .select2-search__field {
+        margin-top: 0.5rem;
+    }
+    
+    /* Button Styles */
+    .btn {
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
+    }
+    
+    .btn-primary {
+        background-color: #00B98E;
+        border-color: #00B98E;
+    }
+    
+    .btn-primary:hover {
+        background-color: #009d7a;
+        border-color: #009d7a;
+        transform: translateY(-1px);
+    }
+    
+    .btn-light {
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+    }
+    
+    .btn-light:hover {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+        transform: translateY(-1px);
+    }
+    
+    /* Card Styles */
+    .card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    
+    .card-header {
+        border-bottom: 1px solid rgba(0,0,0,.125);
+        border-radius: 1rem 1rem 0 0 !important;
+        background-color: #fff;
+    }
+    
+    /* Form Label Styles */
+    .form-label {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-text {
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .d-flex.gap-2 {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        
+        .input-group {
+            flex-direction: column;
+        }
+        
+        .input-group-text {
+            border-radius: 0.5rem 0.5rem 0 0;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .input-group .form-control {
+            border-radius: 0 0 0.5rem 0.5rem;
+            border-left: 1px solid #dee2e6;
+        }
+    }
+</style>
+
+<script>
+    // Form validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+
+    // Image preview
+    document.getElementById('id_photo').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('imagePreview');
+                const noImage = document.getElementById('noImage');
+                preview.querySelector('img').src = e.target.result;
+                preview.style.display = 'block';
+                noImage.style.display = 'none';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Initialize Select2 with custom styling
+    $(document).ready(function() {
+        $('#id_doctor').select2({
+            placeholder: 'Выберите врачей',
+            allowClear: true,
+            language: {
+                noResults: function() {
+                    return "Ничего не найдено";
+                }
+            },
+            templateResult: formatDoctor,
+            templateSelection: formatDoctor
+        });
+    });
+
+    function formatDoctor(doctor) {
+        if (!doctor.id) return doctor.text;
+        return $('<span><i class="fa fa-user-md me-2"></i>' + doctor.text + '</span>');
+    }
+</script>
+{% endblock %}

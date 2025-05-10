@@ -1,0 +1,38 @@
+[
+    {
+        "model": "catalog.appointment",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "service": 1,
+            "doctor": 1,
+            "date": "2024-03-20T10:00:00Z",
+            "condition": 1,
+            "was_rescheduled": false
+        }
+    },
+    {
+        "model": "catalog.appointment",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "service": 2,
+            "doctor": 2,
+            "date": "2024-03-21T14:30:00Z",
+            "condition": 1,
+            "was_rescheduled": false
+        }
+    },
+    {
+        "model": "catalog.appointment",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "service": 3,
+            "doctor": 3,
+            "date": "2024-03-22T16:00:00Z",
+            "condition": 3,
+            "was_rescheduled": false
+        }
+    }
+] 

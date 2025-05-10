@@ -1,0 +1,150 @@
+{% extends 'catalog/base_manager.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Редактирование врача{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h2><i class="fa fa-user-md me-2"></i>Редактирование врача</h2>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="{% url 'team' %}" class="btn btn-outline-secondary">
+            <i class="fa fa-arrow-left me-2"></i>Назад к списку
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                {{ form.name|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                {{ form.last_name|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {{ form.position|as_crispy_field }}
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {{ form.about|as_crispy_field }}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Фотография</label>
+                        <div class="d-flex align-items-center">
+                            {% if object.photo %}
+                            <div class="me-3">
+                                <img src="{{ object.photo.url }}" alt="{{ object.get_full_name }}" 
+                                     class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                            </div>
+                            {% endif %}
+                            <div class="flex-grow-1">
+                                {{ form.photo|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-check form-switch mb-4">
+                        {{ form.is_active|as_crispy_field }}
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'team' %}" class="btn btn-outline-secondary">
+                            Отмена
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save me-2"></i>Сохранить изменения
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title mb-3">
+                    <i class="fa fa-info-circle me-2"></i>Информация
+                </h5>
+                <div class="alert alert-info">
+                    <p class="mb-2"><strong>Советы по заполнению:</strong></p>
+                    <ul class="mb-0 ps-3">
+                        <li>Загружайте фотографию в формате JPG или PNG</li>
+                        <li>Рекомендуемый размер фото: 400x400 пикселей</li>
+                        <li>Описание должно быть информативным, но кратким</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-floating > .form-control,
+    .form-floating > .form-control-plaintext {
+        height: calc(3.5rem + 2px);
+        line-height: 1.25;
+    }
+    .form-floating > textarea.form-control {
+        height: auto;
+    }
+    .form-floating > label {
+        padding: 1rem 0.75rem;
+    }
+    .form-check-input:checked {
+        background-color: #00B98E;
+        border-color: #00B98E;
+    }
+    .btn-primary {
+        background-color: #00B98E;
+        border-color: #00B98E;
+    }
+    .btn-primary:hover {
+        background-color: #009d7a;
+        border-color: #009d7a;
+    }
+    .alert-info {
+        background-color: #e8f4f8;
+        border-color: #d1e7f0;
+        color: #0c5460;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Preview uploaded image
+    const photoInput = document.querySelector('input[type="file"]');
+    if (photoInput) {
+        photoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.querySelector('.rounded-circle');
+                    if (preview) {
+                        preview.src = e.target.result;
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+});
+</script>
+{% endblock %} 

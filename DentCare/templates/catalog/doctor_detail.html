@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Hero Start -->
+<div class="container-fluid bg-primary py-5 hero-header mb-5">
+    <div class="row py-3">
+        <div class="col-12 text-center">
+            <h1 class="display-3 text-white animated zoomIn">Информация о враче</h1>
+            <a href="{% url 'index' %}" class="h4 text-white">Главная</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a href="{% url 'team' %}" class="h4 text-white">Наша команда</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a href="#" class="h4 text-white">Врач</a>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+<!-- Doctor Detail Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-4">
+                <div class="bg-light rounded p-5">
+                    <div class="text-center">
+                        {% if doctor.photo %}
+                            <img src="{{ doctor.photo.url }}" alt="{{ doctor.name }} {{ doctor.last_name }}" class="img-fluid rounded-circle mb-4" style="width: 200px; height: 200px; object-fit: cover;">
+                        {% else %}
+                            <img src="/static/img/team-1.jpg" alt="{{ doctor.name }} {{ doctor.last_name }}" class="img-fluid rounded-circle mb-4" style="width: 200px; height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <h3 class="mb-3">{{ doctor.name }} {{ doctor.last_name }}</h3>
+                        <p class="text-primary mb-4">{{ doctor.position }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="bg-light rounded p-5">
+                    <h2 class="mb-4">О враче</h2>
+                    <p class="mb-4">{{ doctor.about }}</p>
+                    
+                    <h3 class="mb-4">Услуги</h3>
+                    <div class="row g-4">
+                        {% for service in doctor.service_set.all %}
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fa fa-check-circle text-primary me-2"></i>
+                                <h5 class="mb-0">{{ service.title }}</h5>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Doctor Detail End -->
+{% endblock %} 

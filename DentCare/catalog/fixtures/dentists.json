@@ -1,0 +1,57 @@
+[
+    {
+        "model": "catalog.doctor",
+        "pk": 1,
+        "fields": {
+            "name": "Иван",
+            "last_name": "Петров",
+            "position": 1,
+            "about": "Опытный главный врач с 15-летним стажем работы. Специализируется на сложных случаях и имплантации.",
+            "photo": "base/no-image.jpg"
+        }
+    },
+    {
+        "model": "catalog.doctor",
+        "pk": 2,
+        "fields": {
+            "name": "Мария",
+            "last_name": "Иванова",
+            "position": 2,
+            "about": "Стоматолог-терапевт с 10-летним опытом. Специализируется на лечении кариеса и эндодонтии.",
+            "photo": "base/no-image.jpg"
+        }
+    },
+    {
+        "model": "catalog.doctor",
+        "pk": 3,
+        "fields": {
+            "name": "Алексей",
+            "last_name": "Смирнов",
+            "position": 3,
+            "about": "Ортопед с 12-летним стажем. Специализируется на протезировании и восстановлении зубов.",
+            "photo": "base/no-image.jpg"
+        }
+    },
+    {
+        "model": "catalog.doctor",
+        "pk": 4,
+        "fields": {
+            "name": "Елена",
+            "last_name": "Козлова",
+            "position": 4,
+            "about": "Хирург-стоматолог с 8-летним опытом. Специализируется на имплантации и сложных удалениях.",
+            "photo": "base/no-image.jpg"
+        }
+    },
+    {
+        "model": "catalog.doctor",
+        "pk": 5,
+        "fields": {
+            "name": "Дмитрий",
+            "last_name": "Новиков",
+            "position": 5,
+            "about": "Ортодонт с 7-летним стажем. Специализируется на исправлении прикуса и выравнивании зубов.",
+            "photo": "base/no-image.jpg"
+        }
+    }
+] 

@@ -1,0 +1,37 @@
+[
+    {
+        "model": "catalog.position",
+        "pk": 1,
+        "fields": {
+            "name": "Главный врач"
+        }
+    },
+    {
+        "model": "catalog.position",
+        "pk": 2,
+        "fields": {
+            "name": "Стоматолог-терапевт"
+        }
+    },
+    {
+        "model": "catalog.position",
+        "pk": 3,
+        "fields": {
+            "name": "Стоматолог-ортопед"
+        }
+    },
+    {
+        "model": "catalog.position",
+        "pk": 4,
+        "fields": {
+            "name": "Стоматолог-хирург"
+        }
+    },
+    {
+        "model": "catalog.position",
+        "pk": 5,
+        "fields": {
+            "name": "Стоматолог-ортодонт"
+        }
+    }
+] 

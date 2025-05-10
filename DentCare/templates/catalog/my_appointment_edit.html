@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Hero Start -->
+<div class="container-fluid bg-primary py-5 hero-header mb-5">
+    <div class="row py-3">
+        <div class="col-12 text-center">
+            <h1 class="display-3 text-white animated zoomIn">Редактирование записи</h1>
+            <a href="{% url 'index' %}" class="h4 text-white">Главная</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a href="{% url 'my-appointment' %}" class="h4 text-white">Мои записи</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a href="{% url 'my-appointment-edit' appointment.pk %}" class="h4 text-white">Редактирование</a>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+<!-- Appointment Edit Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="bg-light rounded p-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="mb-0">Информация о записи</h2>
+                        <a href="{% url 'my-appointment' %}" class="btn btn-secondary">
+                            <i class="fa fa-arrow-left me-2"></i>Назад
+                        </a>
+                    </div>
+
+                    <!-- Current Appointment Info -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <h4 class="card-title mb-3">{{ appointment.service }}</h4>
+                            <div class="mb-3">
+                                <p class="mb-2">
+                                    <i class="fa fa-user text-primary me-2"></i>
+                                    {{ appointment.user.get_full_name }}
+                                </p>
+                                {% if appointment.doctor %}
+                                <p class="mb-2">
+                                    <i class="fa fa-user-md text-primary me-2"></i>
+                                    {{ appointment.doctor.name }} {{ appointment.doctor.last_name }}
+                                </p>
+                                {% else %}
+                                <p class="mb-2 text-muted">
+                                    <i class="fa fa-user-md me-2"></i>
+                                    Врач не назначен
+                                </p>
+                                {% endif %}
+                                <p class="mb-2">
+                                    <i class="fa fa-clock text-primary me-2"></i>
+                                    Текущая дата: {{ appointment.date|date:"d.m.Y H:i" }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Form -->
+                    <form method="post" class="mb-4">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <h4 class="mb-3">Изменить дату</h4>
+                            <div class="form-group">
+                                <label for="id_date">Новая дата и время</label><br>
+                                {{ form.date }}
+                                {% if form.date.errors %}
+                                    <div class="text-danger">{{ form.date.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <button class="btn btn-primary w-100 py-3" type="submit" name="action" value="reschedule">
+                            <i class="fa fa-calendar-alt me-2"></i>Изменить дату
+                        </button>
+                    </form>
+
+                    <!-- Cancel Appointment -->
+                    <div class="border-top pt-4">
+                        <h4 class="mb-3 text-danger">Отменить запись</h4>
+                        <p class="text-muted mb-4">Внимание! Это действие нельзя будет отменить.</p>
+                        <form method="post" onsubmit="return confirm('Вы уверены, что хотите отменить запись?');">
+                            {% csrf_token %}
+                            <button class="btn btn-danger w-100 py-3" type="submit" name="action" value="cancel">
+                                <i class="fa fa-times me-2"></i>Отменить запись
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Appointment Edit End -->
+
+<style>
+.hover-card {
+    transition: transform 0.2s ease-in-out;
+}
+.hover-card:hover {
+    transform: translateY(-5px);
+    cursor: pointer;
+}
+</style>
+{% endblock %} 

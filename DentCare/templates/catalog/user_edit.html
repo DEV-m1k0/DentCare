@@ -1,0 +1,209 @@
+{% extends 'catalog/base_manager.html' %}
+{% load static %}
+
+{% block title %}Редактирование пользователя{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">
+                    <i class="fas fa-user-edit me-2"></i>Редактирование пользователя
+                </h1>
+                <a href="{% url 'admin_all-users' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Назад к списку
+                </a>
+            </div>
+
+            <!-- Edit Form Card -->
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- User Information -->
+                        <div class="row g-3">
+                            <!-- First Name -->
+                            <div class="col-md-4">
+                                <label for="id_first_name" class="form-label">Имя</label>
+                                <input type="text" class="form-control" id="id_first_name" name="first_name" 
+                                       value="{{ form.first_name.value|default:'' }}" required>
+                                {% if form.first_name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.first_name.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="col-md-4">
+                                <label for="id_last_name" class="form-label">Фамилия</label>
+                                <input type="text" class="form-control" id="id_last_name" name="last_name" 
+                                       value="{{ form.last_name.value|default:'' }}" required>
+                                {% if form.last_name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.last_name.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Patronymic -->
+                            <div class="col-md-4">
+                                <label for="id_patronymic" class="form-label">Отчество</label>
+                                <input type="text" class="form-control" id="id_patronymic" name="patronymic" 
+                                       value="{{ form.patronymic.value|default:'' }}">
+                                {% if form.patronymic.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.patronymic.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <label for="id_email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="id_email" name="email" 
+                                       value="{{ form.email.value|default:'' }}" required>
+                                {% if form.email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.email.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Role -->
+                            <div class="col-md-6">
+                                <label for="id_role" class="form-label">Роль</label>
+                                <select class="form-select" id="id_role" name="role" required>
+                                    {% for value, label in form.fields.role.choices %}
+                                    <option value="{{ value }}" {% if form.role.value == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                {% if form.role.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.role.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Active Status -->
+                            <div class="col-12">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="id_is_active" name="is_active" 
+                                           {% if form.is_active.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="id_is_active">Активный пользователь</label>
+                                </div>
+                                {% if form.is_active.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.is_active.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <a href="{% url 'admin_all-users' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Отмена
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_css %}
+<style>
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .form-control, .form-select {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #ced4da;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(0, 185, 142, 0.25);
+    }
+
+    .form-check-input:checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+    }
+
+    .invalid-feedback {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    @media (max-width: 768px) {
+        .container-fluid {
+            padding: 1rem;
+        }
+        
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        
+        .d-flex.justify-content-end {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Form validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}
+{% endblock %} 
